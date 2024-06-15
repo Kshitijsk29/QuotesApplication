@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 
 
-class MainViewModel(  val  context: Context):ViewModel() {
+class MainViewModel(private val  context: Context):ViewModel() {
 
     private var quoteList: Array<Quotes> = emptyArray()
 
@@ -27,8 +27,8 @@ class MainViewModel(  val  context: Context):ViewModel() {
     }
     fun getQuote() = quoteList[index]
 
-    fun getNext()=quoteList[++index]
+    fun getNext()=quoteList[++index % quoteList.size]
 
-    fun getPrevious() =quoteList[--index]
+    fun getPrevious() =quoteList[(--index + quoteList.size) % quoteList.size]
 
 }

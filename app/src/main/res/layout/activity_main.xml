@@ -12,12 +12,13 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:layout_marginTop="50dp"
         android:id="@+id/tvHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quotes"
+        android:text="@string/quotes"
         android:textStyle="bold|italic"
-        android:textSize="35dp"
+        android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,10 +28,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingTop="25dp"
+        android:paddingEnd="25dp"
+        android:paddingStart="25dp"
         android:paddingBottom="40dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
+        android:layout_margin="10dp"
         android:background="@drawable/qoute_card"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,24 +41,26 @@
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:contentDescription="@string/todo"
             android:src="@drawable/baseline_format_quote_24"
             />
         <TextView
             android:id="@+id/tvQuote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="23dp"
-            android:text="Genius is one percent inspiration and ninety-nine percent perspiration."/>
+            android:textSize="23sp"
+            android:text="@string/demoTXT"/>
 
         <TextView
             android:id="@+id/tvAuthor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bruce Wayne"
+            android:text="@string/bruce_wayne"
             android:layout_marginTop="10dp"
             android:textSize="18sp"
             android:padding="8dp"
             android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:fontFamily="cursive"/>
 
     </LinearLayout>
@@ -65,6 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -74,14 +79,17 @@
             android:id="@+id/tvPrevious"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="27sp"
+            android:textSize="20sp"
             android:text="@string/previous"
-            android:drawableTint="#80FFFFFF"
             android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:textAlignment="textStart"
+            android:paddingTop="25dp"
             android:layout_weight="1"
             android:onClick="onPrevious"
-            app:drawableStartCompat="@drawable/icon_previous" />
+            android:minHeight="48dp"
+            app:drawableStartCompat="@drawable/icon_previous"
+            app:drawableTint="#80FFFFFF" />
 
         <TextView
             android:id="@+id/tvNext"
@@ -89,27 +97,32 @@
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
             android:text="@string/next"
-            android:drawableTint="#80FFFFFF"
+            android:paddingTop="25dp"
             android:paddingEnd="5dp"
-            android:textSize="27sp"
+            android:paddingStart="5dp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:onClick="onNext"
-            app:drawableEndCompat="@drawable/icon_next" />
+            android:minHeight="48dp"
+            app:drawableEndCompat="@drawable/icon_next"
+            app:drawableTint="#80FFFFFF" />
 
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="TODO"
+        android:contentDescription="@string/todo"
         app:srcCompat="@drawable/icon_share"
         android:clickable="true"
         android:foregroundTint="#FFF"
         app:layout_constraintTop_toBottomOf="@id/cardLinearLayout"
         app:layout_constraintBottom_toBottomOf="@id/cardLinearLayout"
         app:layout_constraintEnd_toEndOf="@id/cardLinearLayout"
-        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
         android:backgroundTint="#454545"
-        android:onClick="onShere"/>
+        app:tint="#FFFFFF"
+        android:focusable="true"
+        android:onClick="onShare"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -45,8 +45,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
-    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation (libs.gson)
 }
