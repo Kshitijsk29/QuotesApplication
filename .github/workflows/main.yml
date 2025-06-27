@@ -84,8 +84,8 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: instrumentation_test_report.html
-          path: app/build/reports/androidTests/connected/debug/instrumentation_test_report.html
+          name: instrumentation_test_report
+          path: app/build/reports/androidTests/connected/debug/
 
 
       - name: Upload screenshots (if any)
