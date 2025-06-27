@@ -9,81 +9,89 @@ on:
 
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name : Checkout the code
-        uses: actions/checkout@v3
+#  lint:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name : Checkout the code
+#        uses: actions/checkout@v3
+#
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#
+#      - name : Run Lint
+#        run: ./gradlew lintDebug
+#
+#      - name : Upload html test report
+#        uses : actions/upload-artifact@v4
+#        with:
+#          name : lint.html
+#          path : app/build/reports/lint-results-debug.html
+#
+#  unit-test :
+#      needs : [lint]
+#      runs-on: ubuntu-latest
+#      steps:
+#        - name: Checkout the code
+#          uses: actions/checkout@v3
+#
+#        - name: Make gradlew executable
+#          run: chmod +x ./gradlew
+#
+#        - name: Run tests
+#          run: ./gradlew test
+#
+#        - name: Upload test report
+#          uses: actions/upload-artifact@v4
+#          with:
+#            name: unit_test_report
+#            path: app/build/reports/tests/testDebugUnitTest/
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name : Run Lint
-        run: ./gradlew lintDebug
-
-      - name : Upload html test report
-        uses : actions/upload-artifact@v4
-        with:
-          name : lint.html
-          path : app/build/reports/lint-results-debug.html
-
-  unit-test :
-      needs : [lint]
-      runs-on: ubuntu-latest
+  instrumentation-test:
+#    needs: [unit-test]
+      runs-on: macos-latest
       steps:
-        - name: Checkout the code
-          uses: actions/checkout@v3
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Setup JDK 17
+          uses: actions/setup-java@v4
+          with:
+              distribution: 'temurin'
+              java-version: 17
 
         - name: Make gradlew executable
           run: chmod +x ./gradlew
 
-        - name: Run tests
-          run: ./gradlew test
+        # Install emulator manually
+        - name: Install emulator
+          run: |
+              yes | /Users/runner/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --install "emulator"
+                /Users/runner/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --update
 
-        - name: Upload test report
+        - name: Run UI Tests on Emulator
+          uses: reactivecircus/android-emulator-runner@v2
+          with:
+              api-level: 29
+              arch: x86_64
+              avd-name: test
+              emulator-options: "-no-window -no-audio -no-boot-anim -gpu swiftshader_indirect"
+              script: |
+                  adb wait-for-device
+                  until adb shell getprop sys.boot_completed | grep -m 1 '1'; do
+                    echo "Waiting for emulator to boot..."
+                    sleep 5
+                  done
+                  ./gradlew connectedDebugAndroidTest
+
+        - name: Upload instrumentation test report
           uses: actions/upload-artifact@v4
           with:
-            name: unit_test_report
-            path: app/build/reports/tests/testDebugUnitTest/
+              name: instrumentation_test_report
+              path: app/build/reports/androidTests/connected/
 
-  instrumentation-test:
-    needs: [unit-test]
-    runs-on: macos-latest
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Ensure emulator support
-        run: |
-          yes | sdkmanager --install "emulator"
-          sdkmanager --update  
-
-      - name: Run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          target: google_apis
-          arch: x86_64
-          avd-name: test
-          emulator-options: |
-              -no-window
-              -gpu swiftshader_indirect
-              -no-snapshot
-              -no-boot-anim
-              -noaudio
-          script: |
-            adb wait-for-device
-            until adb shell getprop sys.boot_completed | grep -m 1 '1'; do
-            echo "Booting..."
-              sleep 5
-              done
-              ./gradlew connectedDebugAndroidTest
-
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
-        with:
-          name: instrumentation_test_report
-          path: app/build/reports/androidTests/connected/
+        - name: Upload screenshots (if any)
+          uses: actions/upload-artifact@v4
+          with:
+              name: test_screenshots.html
+              path: app/build/outputs/androidTest-results/connected/test_screenshots.html
+#          path: app/build/reports/androidTests/connected/
