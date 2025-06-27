@@ -69,7 +69,7 @@ jobs:
                 /Users/runner/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --update
 
         - name: Run UI Tests on Emulator
-          uses: reactivecircus/android-emulator-runner@v3
+          uses: reactivecircus/android-emulator-runner@v2
           with:
               api-level: 29
               arch: arm64-v8a
