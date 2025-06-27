@@ -85,67 +85,12 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: instrumentation_test_report
-          path: app/build/reports/androidTests/connected/
+          name: instrumentation_test_report.html
+          path: app/build/reports/androidTests/connected/debug/instrumentation_test_report.html
 
 
-
-#  instrumentation-test:
-#    runs-on: ubuntu-latest
-#    outputs:
-#      maven_tests: ${{ steps.maven_tests.outcome }}
-#
-#    steps:
-#      - name: Enable KVM
-#        run: |
-#          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-#          sudo udevadm control --reload-rules
-#          sudo udevadm trigger --name-match=kvm
-#
-#      - name: Checkout project
-#        uses: actions/checkout@v4
-#
-#      - name: Set up JDK
-#        uses: actions/setup-java@v3
-#        with:
-#          distribution: 'temurin'
-#          java-version: '17'
-#          cache: maven
-#
-#      - name: Build with Maven
-#        run: mvn install -DskipTests
-#
-#      - name: Start Appium Server
-#        run: |
-#          chmod +x ./scripts/prepareAppiumServer.sh
-#          ./scripts/prepareAppiumServer.sh
-#
-#      - name: Run tests on Android emulators
-#        id: maven_tests
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: 28
-#          target: google_apis
-#          arch: x86_64
-#          profile: Nexus 6
-#          script: |
-#            chmod +x ./scripts/start_emulator_2.sh
-#            ./scripts/start_emulator_2.sh
-#
-#            chmod +x ./scripts/uploadAPK.sh
-#            ./scripts/uploadAPK.sh
-#
-#            mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testng-local.xml || true
-#
-#            echo "Closing connection with emulator-5554"
-#            adb -s emulator-5554 emu kill || true
-#
-#            echo "Closing connection with emulator-5556"
-#            adb -s emulator-5556 emu kill || true
-#
-#      - name: Upload results (emulador)
-#        if: always()
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: instrumentation_test_report
-#          path: app/build/reports/androidTests/connected/
+      - name: Upload screenshots (if any)
+        uses: actions/upload-artifact@v4
+        with:
+            name: test_screenshots.html
+            path: app/build/outputs/androidTest-results/connected/test_screenshots.html
