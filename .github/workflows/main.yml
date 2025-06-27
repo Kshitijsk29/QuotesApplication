@@ -72,22 +72,17 @@ jobs:
           uses: reactivecircus/android-emulator-runner@v2
           with:
               api-level: 29
-              arch: x86_64
+              arch: arm64-v8a
+              target: google_apis
               avd-name: test
-              emulator-options: "-no-window -no-audio -no-boot-anim -gpu swiftshader_indirect"
-              script: |
-                  adb wait-for-device
-                  until adb shell getprop sys.boot_completed | grep -m 1 '1'; do
-                    echo "Waiting for emulator to boot..."
-                    sleep 5
-                  done
-                  ./gradlew connectedDebugAndroidTest
+              emulator-options: "-no-window -no-audio -no-boot-anim"
+              script: ./gradlew connectedDebugAndroidTest
 
         - name: Upload instrumentation test report
           uses: actions/upload-artifact@v4
           with:
-              name: instrumentation_test_report
-              path: app/build/reports/androidTests/connected/
+              name: instrumentation_test_report.html
+              path: app/build/reports/androidTests/connected/instrumentation_test_report.html
 
         - name: Upload screenshots (if any)
           uses: actions/upload-artifact@v4
